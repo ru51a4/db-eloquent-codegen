@@ -51,7 +51,7 @@
 <script>
 
     let data = [
-        { tableName: 'post', column: [{ colName: 'id', colType: 'int' }, { colName: 'text', colType: 'text', relation: -1 }] }
+        { tableName: 'post', column: [{ colName: 'id', colType: 'int', relation: -1 }, { colName: 'text', colType: 'text', relation: -1 }] }
     ];
     let types = [
         'int',
@@ -92,7 +92,6 @@
     }
 
     let changeRelation = (idTable, idColumn, r) => {
-        console.log(r)
         data[idTable].column[idColumn].relation = r;
         render();
     }
@@ -103,11 +102,12 @@
             let t = ``;
             t += `
              <div style="margin:10px; height: 100%; padding: 10px; border: 1px solid black; "
-                class="d-flex flex-row justify-content-between">
+                class="d-flex flex-row align-items-center justify-content-between">
                 <input type="text" onchange="changeTableName(${i},event.target.value)" value="${data[i].tableName}">
+                <div class="d-flex flex-wrap">
                 ${data[i].column.reduce((acc, item, j) => {
                 return acc += `
-                 <div style="border:1px solid black;">
+                 <div style="border:1px solid black; margin:3px;">
                
                 <input type="text" style="border:unset; padding:unset;" onchange="changeColName(${i},${j},event.target.value)" value="${item.colName}">
                     <select onchange="changeType(${i},${j},event.target.value)">
@@ -130,6 +130,7 @@
                 </div>
                     `
             }, '')}
+            </div>
                  <div class="">
                     <button class="btn-primary" onclick="addCol(${i})">add col</button>
                     <button class="btn-primary" onclick="deleteTable(${i})">del table</button>
