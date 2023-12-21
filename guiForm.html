@@ -19,24 +19,26 @@
             </a>
 
         </header>
-        <div style="align-content: flex-start; min-height: 40vh;" class="row main">
-            <div style="align-content: flex-start; height: 100%; padding: 10px; border: 1px solid black; "
-                class="d-flex flex-row justify-content-between">
-                <div>tableName</div>
-                <div class="">
-                    <span>id</span>
-                    <select onchange="">
-                        <option>int</option>
-                        <option>text</option>
-                    </select>
-                    <button class="btn-primary" onclick="delCol()">del col</button>
-                </div>
-                <div class="">
-                    <button class="btn-primary" onclick="addCol()">add col</button>
-                    <button class="btn-primary" onclick="deleteTable()">del table</button>
-                </div>
+    </div>
+    <div style="align-content: flex-start; min-height: 40vh; margin: 100px;" class="row main">
+        <div style="align-content: flex-start; height: 100%; padding: 10px; border: 1px solid black; "
+            class="d-flex flex-row justify-content-between">
+            <div>tableName</div>
+            <div class="">
+                <span>id</span>
+                <select onchange="">
+                    <option>int</option>
+                    <option>text</option>
+                </select>
+                <button class="btn-primary" onclick="delCol()">del col</button>
+            </div>
+            <div class="">
+                <button class="btn-primary" onclick="addCol()">add col</button>
+                <button class="btn-primary" onclick="deleteTable()">del table</button>
             </div>
         </div>
+    </div>
+    <div class="container">
         <div class="row">
             <button class="btn-primary" onclick="addTable()">add table</button>
         </div>
