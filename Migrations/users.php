@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDiariesTable extends Migration
+class CreateusersTable extends Migration
 {
 /**
 * Run the migrations.
@@ -16,9 +16,9 @@ class CreateDiariesTable extends Migration
     {
         Schema::create("users", function (Blueprint $table) {
             $table->id();            
-			$table->text("name");
-			$table->text("email");
-			$table->text("password");
+		$table->text("name");
+		$table->text("email");
+		$table->text("password");
 
         });
     }

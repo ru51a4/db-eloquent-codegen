@@ -26,6 +26,11 @@
                 "colName": "posts",
                 "colType": "hasMany",
                 "relation": 2
+            },
+            {
+                "colName": "statuses",
+                "colType": "belongsToMany",
+                "relation": 3
             }
         ]
     },
@@ -71,6 +76,16 @@
                 "colName": "diary_id",
                 "colType": "belongsTo",
                 "relation": 1
+            }
+        ]
+    },
+    {
+        "tableName": "statuses",
+        "column": [
+            {
+                "colName": "user",
+                "colType": "belongsToMany",
+                "relation": 0
             }
         ]
     }

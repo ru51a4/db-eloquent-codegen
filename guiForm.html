@@ -57,7 +57,8 @@
                 { colName: 'email', colType: 'text', relation: -1 },
                 { colName: 'password', colType: 'text', relation: -1 },
                 { colName: 'diaries', colType: 'hasMany', relation: 1 },
-                { colName: 'posts', colType: 'hasMany', relation: 2 }
+                { colName: 'posts', colType: 'hasMany', relation: 2 },
+                { colName: 'statuses', colType: 'belongsToMany', relation: 3 },
             ]
         },
         {
@@ -78,6 +79,12 @@
 
             ]
         },
+        {
+            tableName: 'statuses', column: [
+                { colName: 'user', colType: 'belongsToMany', relation: 0 },
+
+            ]
+        }
     ];
     let types = [
         'int',

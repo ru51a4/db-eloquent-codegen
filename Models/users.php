@@ -21,4 +21,9 @@ class users extends Model
         return $this->hasMany("posts");
     }
 
+    public function statuses()
+    {
+        return $this->belongsToMany("statuses", "users_statuses");
+    }
+
 }

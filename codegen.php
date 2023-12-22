@@ -4,10 +4,8 @@
 */
 class codegen{
     static public function gen(){
-        $migrations = [];
-        $models = [];
 
-        $scheme = json_decode(file_get_contents('./scheme_diary.json'),1);
+        $scheme = json_decode(file_get_contents('./scheme.json'),1);
          
         self::createMigration($scheme);
         self::createModels($scheme);
@@ -15,7 +13,8 @@ class codegen{
        
     }
     static public function createModels($scheme){
-         foreach($scheme as $table){
+        $mapmtm = []; 
+        foreach($scheme as $table){
             $tModel = '';
             $tModel .= '
 <?php
@@ -47,6 +46,22 @@ class '.$table['tableName'].' extends Model
     }
 ';
                 }
+
+                if($col['colType'] == 'belongsToMany'){
+                    $tabl = $table["tableName"] . '_' .$scheme[$col['relation']]["tableName"];
+                    if($mapmtm[$tabl]) {
+                    $tabl = $scheme[$col['relation']]["tableName"] . '_' .$table["tableName"];    
+                    }
+                    $mapmtm[$table["tableName"] . '_' .$scheme[$col['relation']]["tableName"]] = true;
+                    $mapmtm[$scheme[$col['relation']]["tableName"] . '_' .$table["tableName"]] = true;
+                     
+                    $tModel .= '
+    public function '.$col['colName'].'()
+    {
+        return $this->belongsToMany("'.$scheme[$col['relation']]['tableName'].'", "'.$tabl.'");
+    }
+';
+                }
   
             }
             $tModel .= '
@@ -66,7 +81,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDiariesTable extends Migration
+class Create'.$table['tableName'].'Table extends Migration
 {
 /**
 * Run the migrations.
@@ -80,17 +95,17 @@ class CreateDiariesTable extends Migration
 ';
             foreach($table["column"] as $col){
                 if($col['colType'] == 'text'){
-                    $tMigration .= "\t\t\t".'$table->text("'.$col['colName'].'");';
+                    $tMigration .= "\t\t".'$table->text("'.$col['colName'].'");';
                     $tMigration .= "\n";
                 }
                 if($col['colType'] == 'int'){
-                    $tMigration .= "\t\t\t".'$table->integer("'.$col['colName'].'");';
+                    $tMigration .= "\t\t".'$table->integer("'.$col['colName'].'");';
                     $tMigration .= "\n";
                 }
                 if($col['colType'] == 'belongsTo'){
-                    $tMigration .= "\t\t\t".'$table->unsignedBigInteger("'.$col['colName'].'");';
+                    $tMigration .= "\t\t".'$table->unsignedBigInteger("'.$col['colName'].'");';
                     $tMigration .= "\n"; 
-                    $tMigration .= "\t\t\t".'$table->foreign("'.$col['colName'].'")->references("id")->on("'.$scheme[$col['relation']]['tableName'].'");';
+                    $tMigration .= "\t\t".'$table->foreign("'.$col['colName'].'")->references("id")->on("'.$scheme[$col['relation']]['tableName'].'");';
                     $tMigration .= "\n";
                 }
             }
@@ -110,6 +125,66 @@ class CreateDiariesTable extends Migration
 }
             ';
             file_put_contents('./Migrations/'.$table['tableName'].'.php', $tMigration);
+
+            //many to many
+            $mtm = [];
+            $map = [];
+            foreach($scheme as $table){
+                foreach($table["column"] as $col){
+                    if($col['colType'] == 'belongsToMany'){
+                        if($map[$table["tableName"] . '_' .$scheme[$col['relation']]["tableName"]]){
+                            continue;
+                        }
+                        $map[$table["tableName"] . '_' .$scheme[$col['relation']]["tableName"]] = true;
+                        $map[$scheme[$col['relation']]["tableName"]. '_'.$table["tableName"]] = true;
+                         
+                        $mtm[] = $table["tableName"] . '_' .$scheme[$col['relation']]["tableName"];
+                    }
+                }
+            }
+            foreach($mtm as $table){
+            $tMigration = '';
+            $tMigration .= '
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class Create'.$table.'Table extends Migration
+{
+/**
+* Run the migrations.
+*
+* @return void
+*/
+    public function up()
+    {
+        
+        Schema::create("'.$table.'", function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger("'.explode("_",$table)[0].'_id");
+            $table->unsignedBigInteger("'.explode("_",$table)[1].'_id");
+            $table->foreign("'.explode("_",$table)[0].'_id")->references("id")->on("'.explode("_",$table)[0].'");
+            $table->foreign("'.explode("_",$table)[1].'_id")->references("id")->on("'.explode("_",$table)[1].'");
+        });
+    }
+
+    /**
+    * Reverse the migrations.
+    *
+    * @return void
+    */
+    public function down()
+    {
+        Schema::dropIfExists("'.$table.'");
+    }
+}
+        ';
+                    file_put_contents('./Migrations/'.$table.'.php', $tMigration);
+
+          }
+
         }
     }
 }

@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDiariesTable extends Migration
+class CreatepostsTable extends Migration
 {
 /**
 * Run the migrations.
@@ -16,11 +16,11 @@ class CreateDiariesTable extends Migration
     {
         Schema::create("posts", function (Blueprint $table) {
             $table->id();            
-			$table->text("message");
-			$table->unsignedBigInteger("user_id");
-			$table->foreign("user_id")->references("id")->on("users");
-			$table->unsignedBigInteger("diary_id");
-			$table->foreign("diary_id")->references("id")->on("diaries");
+		$table->text("message");
+		$table->unsignedBigInteger("user_id");
+		$table->foreign("user_id")->references("id")->on("users");
+		$table->unsignedBigInteger("diary_id");
+		$table->foreign("diary_id")->references("id")->on("diaries");
 
         });
     }
