@@ -1,0 +1,77 @@
+[
+    {
+        "tableName": "users",
+        "column": [
+            {
+                "colName": "name",
+                "colType": "text",
+                "relation": -1
+            },
+            {
+                "colName": "email",
+                "colType": "text",
+                "relation": -1
+            },
+            {
+                "colName": "password",
+                "colType": "text",
+                "relation": -1
+            },
+            {
+                "colName": "diaries",
+                "colType": "hasMany",
+                "relation": 1
+            },
+            {
+                "colName": "posts",
+                "colType": "hasMany",
+                "relation": 2
+            }
+        ]
+    },
+    {
+        "tableName": "diaries",
+        "column": [
+            {
+                "colName": "name",
+                "colType": "text",
+                "relation": -1
+            },
+            {
+                "colName": "description",
+                "colType": "text",
+                "relation": -1
+            },
+            {
+                "colName": "posts",
+                "colType": "hasMany",
+                "relation": 2
+            },
+            {
+                "colName": "user_id",
+                "colType": "belongsTo",
+                "relation": 0
+            }
+        ]
+    },
+    {
+        "tableName": "posts",
+        "column": [
+            {
+                "colName": "message",
+                "colType": "text",
+                "relation": -1
+            },
+            {
+                "colName": "user_id",
+                "colType": "belongsTo",
+                "relation": 0
+            },
+            {
+                "colName": "diary_id",
+                "colType": "belongsTo",
+                "relation": 1
+            }
+        ]
+    }
+]
