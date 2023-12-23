@@ -188,7 +188,7 @@ class Create'.$table.'Table extends Migration
     }
 }
         ';
-        force_file_put_contents('./'.$GLOBALS['id'].'/'.'migrations/'.$table.'.php', $tModel);
+        force_file_put_contents('./'.$GLOBALS['id'].'/'.'migrations/'.$table.'.php', $tMigration);
 
           }
 
