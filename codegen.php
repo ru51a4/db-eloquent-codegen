@@ -2,11 +2,18 @@
 /*
 Класс для генерации php фаилов бд по json схемы бд
 */
+$GLOBALS['id'] = uniqid();
+function force_file_put_contents ($pathWithFileName,  $data, $flags = 0) {
+  $dirPathOnly = dirname($pathWithFileName);
+  if (!file_exists($dirPathOnly)) {
+    mkdir($dirPathOnly, 0777, true); // folder permission 0775
+  }
+  file_put_contents($pathWithFileName, $data, $flags);
+}
 class codegen{
+    
     static public function gen(){
-
-        $scheme = json_decode(file_get_contents('./scheme.json'),1);
-         
+        $scheme = json_decode(file_get_contents("php://input"),1)['data'];
         self::createMigration($scheme);
         self::createModels($scheme);
         
@@ -34,7 +41,7 @@ class '.$table['tableName'].' extends Model
                     $tModel .= '
     public function '.explode('_',$col['colName'])[0].'()
     {
-        return $this->belongsTo("'.$scheme[$col['relation']]['tableName'].'");
+        return $this->belongsTo("\App\Models\\'.$scheme[$col['relation']]['tableName'].'");
     }
 ';
                 }
@@ -42,7 +49,7 @@ class '.$table['tableName'].' extends Model
                     $tModel .= '
     public function '.$col['colName'].'()
     {
-        return $this->hasMany("'.$scheme[$col['relation']]['tableName'].'");
+        return $this->hasMany("\App\Models\\'.$scheme[$col['relation']]['tableName'].'");
     }
 ';
                 }
@@ -58,7 +65,7 @@ class '.$table['tableName'].' extends Model
                     $tModel .= '
     public function '.$col['colName'].'()
     {
-        return $this->belongsToMany("'.$scheme[$col['relation']]['tableName'].'", "'.$tabl.'");
+        return $this->belongsToMany("\App\Models\\'.$scheme[$col['relation']]['tableName'].'", "'.$tabl.'");
     }
 ';
                 }
@@ -66,7 +73,7 @@ class '.$table['tableName'].' extends Model
             }
             $tModel .= '
 }';
-        file_put_contents('./Models/'.$table['tableName'].'.php', $tModel);
+        force_file_put_contents('./'.$GLOBALS['id'].'//models/'.$table['tableName'].'.php', $tModel);
 
     }
 }
@@ -124,7 +131,7 @@ class Create'.$table['tableName'].'Table extends Migration
     }
 }
             ';
-            file_put_contents('./Migrations/'.$table['tableName'].'.php', $tMigration);
+            force_file_put_contents('./'.$GLOBALS['id'].'//migrations/'.$table['tableName'].'.php', $tMigration);
 
             //many to many
             $mtm = [];
@@ -181,7 +188,7 @@ class Create'.$table.'Table extends Migration
     }
 }
         ';
-                    file_put_contents('./Migrations/'.$table.'.php', $tMigration);
+        force_file_put_contents('./'.$GLOBALS['id'].'/'.'migrations/'.$table.'.php', $tModel);
 
           }
 
@@ -189,3 +196,37 @@ class Create'.$table.'Table extends Migration
     }
 }
 codegen::gen();
+$rootPath = rtrim($rootPath, '\\/');
+
+// Get real path for our folder
+$rootPath = realpath($GLOBALS['id']);
+
+$zip = new ZipArchive;
+if ($zip->open($GLOBALS['id'].'.zip', ZipArchive::CREATE) === TRUE)
+{
+    // Add files to the zip file inside demo_folder
+foreach(['./'.$GLOBALS['id'].'/migrations','./'.$GLOBALS['id'].'/models'] as $path){
+    $files = new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator($path),
+    RecursiveIteratorIterator::LEAVES_ONLY
+    );
+
+    foreach ($files as $file)
+    {
+        // Skip directories (they would be added automatically)
+        if (!$file->isDir())
+        {
+            // Get real and relative path for current file
+            $filePath = $file->getRealPath();
+            $relativePath = substr($filePath, strlen($rootPath) + 1);
+
+            // Add current file to archive
+            $zip->addFile($filePath, $relativePath);
+        }
+    }
+}
+    // All files are added, so close the zip file.
+    $zip->close();
+}
+
+echo "/db-eloquent-codegen/".$GLOBALS['id'].'.zip';

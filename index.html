@@ -178,13 +178,17 @@
     render();
 
     let genSchema = () => {
-        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-        var downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "scheme.json");
-        document.body.appendChild(downloadAnchorNode); // required for firefox
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
+        $.ajax({
+            url: "codegen.php",
+            type: "POST",
+            data: JSON.stringify({ data }),
+            contentType: "application/json; charset=utf-8",
+            traditional: true,
+            complete: (data) => {
+                console.log({ data })
+                window.location.href = data.responseText;
+            }
+        });
 
     }
 
