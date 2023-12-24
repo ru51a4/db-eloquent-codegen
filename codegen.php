@@ -200,7 +200,7 @@ $rootPath = rtrim($rootPath, '\\/');
 
 // Get real path for our folder
 $rootPath = realpath($GLOBALS['id']);
-$dels = [$GLOBALS['id'].'.zip'];
+$dels = [];
 $zip = new ZipArchive;
 if ($zip->open($GLOBALS['id'].'.zip', ZipArchive::CREATE) === TRUE)
 {
