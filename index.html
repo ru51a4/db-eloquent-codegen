@@ -148,6 +148,7 @@
     }
     let html = '';
     let render = () => {
+        localStorage.setItem('data', JSON.stringify(data))
         html = '';
         for (let i = 0; i <= data.length - 1; i++) {
             let t = ``;
@@ -192,7 +193,10 @@
         }
         document.querySelector(".main").innerHTML = html
     }
-
+    _data = JSON.parse(localStorage.getItem('data'));
+    if (_data) {
+        data = _data
+    }
     render();
 
     let genSchema = () => {
