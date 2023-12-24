@@ -200,7 +200,7 @@ $rootPath = rtrim($rootPath, '\\/');
 
 // Get real path for our folder
 $rootPath = realpath($GLOBALS['id']);
-
+$dels = [$GLOBALS['id'].'.zip'];
 $zip = new ZipArchive;
 if ($zip->open($GLOBALS['id'].'.zip', ZipArchive::CREATE) === TRUE)
 {
@@ -219,7 +219,7 @@ foreach(['./'.$GLOBALS['id'].'/migrations','./'.$GLOBALS['id'].'/models'] as $pa
             // Get real and relative path for current file
             $filePath = $file->getRealPath();
             $relativePath = substr($filePath, strlen($rootPath) + 1);
-
+            $dels[] = $filePath;
             // Add current file to archive
             $zip->addFile($filePath, $relativePath);
         }
@@ -230,3 +230,6 @@ foreach(['./'.$GLOBALS['id'].'/migrations','./'.$GLOBALS['id'].'/models'] as $pa
 }
 
 echo "/db-eloquent-codegen/".$GLOBALS['id'].'.zip';
+foreach($dels as $path){
+    unlink($path);
+}
