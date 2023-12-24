@@ -95,11 +95,11 @@
         'belongsToMany'
     ];
     let addTable = () => {
-        data.push({ tableName: 'demo', column: [{ colName: 'id', colType: 'int', relation: -1 }] })
+        data.push({ tableName: 'demo', column: [] })
         render();
     }
     let addCol = (id) => {
-        data[id].column.push({ colName: 'id', colType: 'int', relation: -1 });
+        data[id].column.push({ colName: 'type', colType: 'int', relation: -1 });
         render();
     }
     let deleteTable = (id) => {
