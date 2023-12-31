@@ -23,11 +23,8 @@ class codegen{
         $mapmtm = []; 
         foreach($scheme as $table){
             $tModel = '';
-            $tModel .= '
-<?php
-
+            $tModel .= '<?php
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,13 +37,13 @@ class '.$table['tableName'].' extends Model
             foreach($table["column"] as $col){
                 if($col['colType'] == 'int'){
                     $tModel .= '
-    public int $'.$col['colName'].'
+    public int $'.$col['colName'].';
 ';
                       }
 
                       if($col['colType'] == 'text'){
                     $tModel .= '
-    public string $'.$col['colName'].'
+    public string $'.$col['colName'].';
 ';
                       }
 
