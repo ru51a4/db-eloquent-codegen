@@ -35,8 +35,21 @@ class '.$table['tableName'].' extends Model
 {
     use HasFactory;
 
-            ';
+    public $timestamps = false
+        ';
             foreach($table["column"] as $col){
+                if($col['colType'] == 'int'){
+                    $tModel .= '
+    public int $'.$col['colName'].'
+';
+                      }
+
+                      if($col['colType'] == 'text'){
+                    $tModel .= '
+    public string $'.$col['colName'].'
+';
+                      }
+
                 if($col['colType'] == 'belongsTo'){
                     $tModel .= '
     public function '.explode('_',$col['colName'])[0].'()
@@ -102,15 +115,15 @@ return new class extends Migration
 ';
             foreach($table["column"] as $col){
                 if($col['colType'] == 'text'){
-                    $tMigration .= "\t\t".'$table->text("'.$col['colName'].'");';
+                    $tMigration .= "\t\t".'$table->text("'.$col['colName'].'")->nullable();';
                     $tMigration .= "\n";
                 }
                 if($col['colType'] == 'int'){
-                    $tMigration .= "\t\t".'$table->integer("'.$col['colName'].'");';
+                    $tMigration .= "\t\t".'$table->integer("'.$col['colName'].'")->nullable();';
                     $tMigration .= "\n";
                 }
                 if($col['colType'] == 'belongsTo'){
-                    $tMigration .= "\t\t".'$table->unsignedBigInteger("'.$col['colName'].'");';
+                    $tMigration .= "\t\t".'$table->unsignedBigInteger("'.$col['colName'].'")->nullable();';
                     $tMigration .= "\n"; 
                     $tMigration .= "\t\t".'$table->foreign("'.$col['colName'].'")->references("id")->on("'.$scheme[$col['relation']]['tableName'].'");';
                     $tMigration .= "\n";
