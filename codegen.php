@@ -88,7 +88,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Create'.$table['tableName'].'Table extends Migration
+return new class extends Migration
 {
 /**
 * Run the migrations.
@@ -129,9 +129,9 @@ class Create'.$table['tableName'].'Table extends Migration
     {
         Schema::dropIfExists("'.$table['tableName'].'");
     }
-}
+};
             ';
-            force_file_put_contents('./'.$GLOBALS['id'].'//migrations/'.$table['tableName'].'.php', $tMigration);
+            force_file_put_contents('./'.$GLOBALS['id'].'//migrations/'.$table['tableName'].'_table.php', $tMigration);
 
             //many to many
             $mtm = [];
@@ -158,7 +158,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Create'.$table.'Table extends Migration
+return new class extends Migration
 {
 /**
 * Run the migrations.
@@ -186,9 +186,9 @@ class Create'.$table.'Table extends Migration
     {
         Schema::dropIfExists("'.$table.'");
     }
-}
+};
         ';
-        force_file_put_contents('./'.$GLOBALS['id'].'/'.'migrations/'.$table.'.php', $tMigration);
+        force_file_put_contents('./'.$GLOBALS['id'].'/'.'migrations/'.$table.'_table.php', $tMigration);
 
           }
 
