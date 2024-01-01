@@ -28,7 +28,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class '.$table['tableName'].' extends Model
+class '.$table['modelNamae'].' extends Model
 {
     use HasFactory;
 
@@ -51,7 +51,7 @@ class '.$table['tableName'].' extends Model
                     $tModel .= '
     public function '.explode('_',$col['colName'])[0].'()
     {
-        return $this->belongsTo("\App\Models\\'.$scheme[$col['relation']]['tableName'].'");
+        return $this->belongsTo("\App\Models\\'.$scheme[$col['relation']]['modelName'].'");
     }
 ';
                 }
@@ -59,7 +59,7 @@ class '.$table['tableName'].' extends Model
                     $tModel .= '
     public function '.$col['colName'].'()
     {
-        return $this->hasMany("\App\Models\\'.$scheme[$col['relation']]['tableName'].'");
+        return $this->hasMany("\App\Models\\'.$scheme[$col['relation']]['modelName'].'");
     }
 ';
                 }
@@ -75,7 +75,7 @@ class '.$table['tableName'].' extends Model
                     $tModel .= '
     public function '.$col['colName'].'()
     {
-        return $this->belongsToMany("\App\Models\\'.$scheme[$col['relation']]['tableName'].'", "'.$tabl.'");
+        return $this->belongsToMany("\App\Models\\'.$scheme[$col['relation']]['modelName'].'", "'.$tabl.'");
     }
 ';
                 }
@@ -83,7 +83,7 @@ class '.$table['tableName'].' extends Model
             }
             $tModel .= '
 }';
-        force_file_put_contents('./'.$GLOBALS['id'].'//models/'.$table['tableName'].'.php', $tModel);
+        force_file_put_contents('./'.$GLOBALS['id'].'//models/'.$table['modelName'].'.php', $tModel);
 
     }
 }

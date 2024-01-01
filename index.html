@@ -64,7 +64,7 @@
 
     let data = [
         {
-            tableName: 'users', column: [
+            tableName: 'users', modelName: "User", column: [
                 { colName: 'name', colType: 'text', relation: -1 },
                 { colName: 'email', colType: 'text', relation: -1 },
                 { colName: 'password', colType: 'text', relation: -1 },
@@ -74,7 +74,7 @@
             ]
         },
         {
-            tableName: 'diaries', column: [
+            tableName: 'diaries', modelName: "Diary", column: [
                 { colName: 'name', colType: 'text', relation: -1 },
                 { colName: 'description', colType: 'text', relation: -1 },
                 { colName: 'posts', colType: 'hasMany', relation: 2 },
@@ -84,7 +84,7 @@
             ]
         },
         {
-            tableName: 'posts', column: [
+            tableName: 'posts', modelName: "Post", column: [
                 { colName: 'message', colType: 'text', relation: -1 },
                 { colName: 'user_id', colType: 'belongsTo', relation: 0 },
                 { colName: 'diary_id', colType: 'belongsTo', relation: 1 }
@@ -92,7 +92,7 @@
             ]
         },
         {
-            tableName: 'statuses', column: [
+            tableName: 'statuses', modelName: "Status", column: [
                 { colName: 'user', colType: 'belongsToMany', relation: 0 },
 
             ]
@@ -131,6 +131,11 @@
         data[idTable].tableName = name;
         render();
     }
+
+    let changeModelName = (idTable, name) => {
+        data[idTable].modelName = name;
+        render();
+    }
     let changeColName = (idTable, idColumn, name) => {
         data[idTable].column[idColumn].colName = name;
         render();
@@ -155,7 +160,14 @@
             t += `
              <div style="margin:10px; height: 100%; padding: 10px; border: 1px solid black; "
                 class="d-flex flex-row align-items-center justify-content-between">
-                <input type="text" onchange="changeTableName(${i},event.target.value)" value="${data[i].tableName}">
+                <div>
+                    <span>tableName</span>
+                    <input type="text" onchange="changeTableName(${i},event.target.value)" value="${data[i].tableName}">
+                </div>
+                <div>
+                    <span>modelName</span>
+                    <input type="text" onchange="changeModelName(${i},event.target.value)" value="${data[i].modelName}">
+                </div>
                 <div class="d-flex flex-wrap">
                 ${data[i].column.reduce((acc, item, j) => {
                 return acc += `
