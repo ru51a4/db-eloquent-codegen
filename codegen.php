@@ -32,7 +32,10 @@ class '.$table['modelNamae'].' extends Model
 {
     use HasFactory;
 
-    public $timestamps = false
+    public $timestamps = false;
+    
+    protected $table = "'.$table["tableName"].'";
+
         ';
             foreach($table["column"] as $col){
                 if($col['colType'] == 'int'){
