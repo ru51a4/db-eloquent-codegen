@@ -37,7 +37,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ' . $table['modelNamae'] . ' extends Model
+class ' . $table['modelName'] . ' extends Model
 {
     use HasFactory;
 
