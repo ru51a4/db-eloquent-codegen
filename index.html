@@ -64,7 +64,7 @@
 
     let data = [
         {
-            tableName: 'users', modelName: "User", column: [
+            tableName: 'users', modelName: "User", generate: false, column: [
                 { colName: 'name', colType: 'text', relation: -1 },
                 { colName: 'email', colType: 'text', relation: -1 },
                 { colName: 'password', colType: 'text', relation: -1 },
@@ -74,7 +74,7 @@
             ]
         },
         {
-            tableName: 'diaries', modelName: "Diary", column: [
+            tableName: 'diaries', modelName: "Diary", generate: true, column: [
                 { colName: 'name', colType: 'text', relation: -1 },
                 { colName: 'description', colType: 'text', relation: -1 },
                 { colName: 'posts', colType: 'hasMany', relation: 2 },
@@ -84,7 +84,7 @@
             ]
         },
         {
-            tableName: 'posts', modelName: "Post", column: [
+            tableName: 'posts', modelName: "Post", generate: true, column: [
                 { colName: 'message', colType: 'text', relation: -1 },
                 { colName: 'user_id', colType: 'belongsTo', relation: 0 },
                 { colName: 'diary_id', colType: 'belongsTo', relation: 1 }
@@ -92,7 +92,7 @@
             ]
         },
         {
-            tableName: 'statuses', modelName: "Status", column: [
+            tableName: 'statuses', modelName: "Status", generate: true, column: [
                 { colName: 'user', colType: 'belongsToMany', relation: 0 },
 
             ]
@@ -107,7 +107,7 @@
         'belongsToMany'
     ];
     let addTable = () => {
-        data.push({ tableName: 'demo', column: [] })
+        data.push({ tableName: 'demo', modelName: "demoModel", generate: true, column: [] })
         render();
     }
     let addCol = (id) => {
@@ -138,6 +138,10 @@
     }
     let changeColName = (idTable, idColumn, name) => {
         data[idTable].column[idColumn].colName = name;
+        render();
+    }
+    let changeGenerate = (idTable, type) => {
+        data[idTable].generate = type;
         render();
     }
 
@@ -196,6 +200,10 @@
             }, '')}
             </div>
                  <div class="">
+                                    <div>
+                    <input type="checkbox" id="scales" onchange="changeGenerate(${i}, ${!data[i].generate})" name="scales" ${data[i].generate ? 'checked' : ''} />
+                    <label for="scales">Scales</label>
+                </div>
                     <button class="btn-primary" onclick="addCol(${i})">add col</button>
                     <button class="btn-primary" onclick="deleteTable(${i})">del table</button>
                 </div>
