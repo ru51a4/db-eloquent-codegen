@@ -74,7 +74,9 @@ class ' . $table['modelName'] . ' extends Model
         return $this->hasMany("\App\Models\\' . $scheme[$col['relation']]['modelName'] . '");
     }
 ';
-                if ($col['colType'] == 'hasOne') {
+                }
+
+            if ($col['colType'] == 'hasOne') {
                                     $tModel .= '
                     public function ' . $col['colName'] . '()
                     {
@@ -82,6 +84,9 @@ class ' . $table['modelName'] . ' extends Model
                     }
                 ';
                 }
+
+
+
 
                 if ($col['colType'] == 'belongsToMany') {
                     $tabl = $table["tableName"] . '_' . $scheme[$col['relation']]["tableName"];
