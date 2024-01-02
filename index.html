@@ -152,6 +152,12 @@
                 data[r].column.push({ colName: data[idTable].tableName + "s", colType: 'hasMany', relation: idTable })
             }
         }
+        if (t === 'hasOne') {
+            if (!data[r].column.find((c) => c.colType === "belongsTo" && c.relation == idTable)) {
+                data[r].column.push({ colName: data[idTable].tableName, colType: 'belongsTo', relation: idTable })
+            }
+        }
+
         data[idTable].column[idColumn].relation = r;
         render();
     }

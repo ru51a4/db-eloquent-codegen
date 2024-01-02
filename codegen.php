@@ -74,6 +74,13 @@ class ' . $table['modelName'] . ' extends Model
         return $this->hasMany("\App\Models\\' . $scheme[$col['relation']]['modelName'] . '");
     }
 ';
+                if ($col['colType'] == 'hasOne') {
+                                    $tModel .= '
+                    public function ' . $col['colName'] . '()
+                    {
+                        return $this->hasOne("\App\Models\\' . $scheme[$col['relation']]['modelName'] . '");
+                    }
+                ';
                 }
 
                 if ($col['colType'] == 'belongsToMany') {
