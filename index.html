@@ -63,9 +63,9 @@
         <div class="row">
             <button class="btn-primary" onclick="addTable()">add table</button>
         </div>
-        <div class="row mt-5">
-            <button class="btn-primary" onclick="genSchema()">generate</button>
+        <div class="row d-flex justify-content-center mt-5">
             <div class="h-captcha" data-sitekey="45acf79f-16c7-4d10-952e-b957fd63a4e2"></div>
+            <button class="btn-primary" onclick="genSchema()">generate</button>
         </div>
         <style>
             footer {
@@ -310,7 +310,7 @@
             $.ajax({
                 url: "codegen.php",
                 type: "POST",
-                data: JSON.stringify({ data }),
+                data: JSON.stringify({ data, captcha: $('[name=h-captcha-response]').value }),
                 contentType: "application/json; charset=utf-8",
                 traditional: true,
                 complete: (data) => {

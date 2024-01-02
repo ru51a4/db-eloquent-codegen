@@ -6,8 +6,8 @@
 //hcaptha
 
 $data = array(
-            'secret' => "",
-            'response' => $_POST['h-captcha-response']
+            'secret' => file_get_contents("./hcaptcha.php"),
+            'response' => json_decode(file_get_contents("php://input"), 1)['captcha']
         );
 $verify = curl_init();
 curl_setopt($verify, CURLOPT_URL, "https://hcaptcha.com/siteverify");
