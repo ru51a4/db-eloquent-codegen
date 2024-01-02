@@ -78,11 +78,11 @@ class ' . $table['modelName'] . ' extends Model
 
             if ($col['colType'] == 'hasOne') {
                                     $tModel .= '
-                    public function ' . $col['colName'] . '()
-                    {
-                        return $this->hasOne("\App\Models\\' . $scheme[$col['relation']]['modelName'] . '");
-                    }
-                ';
+    public function ' . $col['colName'] . '()
+    {
+        return $this->hasOne("\App\Models\\' . $scheme[$col['relation']]['modelName'] . '");
+    }
+';
                 }
 
 
