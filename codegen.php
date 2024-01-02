@@ -6,7 +6,7 @@
 //hcaptha
 
 $data = array(
-            'secret' => file_get_contents("./hcaptcha.php"),
+            'secret' => "",
             'response' => json_decode(file_get_contents("php://input"), 1)['data']['captcha']
         );
 $verify = curl_init();
