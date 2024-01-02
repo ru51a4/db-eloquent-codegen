@@ -7,7 +7,7 @@
 
 $data = array(
             'secret' => file_get_contents("./hcaptcha.php"),
-            'response' => json_decode(file_get_contents("php://input"), 1)['captcha']
+            'response' => json_decode(file_get_contents("php://input"), 1)['data']['captcha']
         );
 $verify = curl_init();
 curl_setopt($verify, CURLOPT_URL, "https://hcaptcha.com/siteverify");
@@ -42,7 +42,7 @@ class codegen
 
     static public function gen()
     {
-        $scheme = json_decode(file_get_contents("php://input"), 1)['data'];
+        $scheme = json_decode(file_get_contents("php://input"), 1)['data']['data'];
         self::createMigration($scheme);
         self::createModels($scheme);
 

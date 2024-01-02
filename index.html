@@ -63,9 +63,12 @@
         <div class="row">
             <button class="btn-primary" onclick="addTable()">add table</button>
         </div>
-        <div class="row d-flex justify-content-center mt-5">
-            <div class="h-captcha" data-sitekey="45acf79f-16c7-4d10-952e-b957fd63a4e2"></div>
-            <button class="btn-primary" onclick="genSchema()">generate</button>
+        <div class="row mt-5">
+            <div class="d-flex flex-column align-items-center">
+                <div class="h-captcha" data-sitekey="45acf79f-16c7-4d10-952e-b957fd63a4e2"></div>
+            </div>
+            <button class="btn-primary mt-2" onclick="genSchema()">generate</button>
+
         </div>
         <style>
             footer {
@@ -306,11 +309,19 @@
             }
             return errors.length
         }
+        if (!document.querySelector('[data-hcaptcha-response]').getAttribute('data-hcaptcha-response')) {
+            document.querySelector(".toast-body").innerHTML = 'captcha';
+            setTimeout(() => {
+                $('.toast').toast('show')
+
+            }, 0);
+
+        }
         if (!validate()) {
             $.ajax({
                 url: "codegen.php",
                 type: "POST",
-                data: JSON.stringify({ data, captcha: $('[name=h-captcha-response]').value }),
+                data: JSON.stringify({ data: { data, captcha: document.querySelector('[data-hcaptcha-response]').getAttribute('data-hcaptcha-response') } }),
                 contentType: "application/json; charset=utf-8",
                 traditional: true,
                 complete: (data) => {
