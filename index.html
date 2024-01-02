@@ -165,12 +165,14 @@
              <div style="margin:10px; height: 100%; padding: 10px; border: 1px solid black; "
                 class="d-flex flex-row align-items-center justify-content-between">
                 <div>
-                    <span>tableName</span>
-                    <input type="text" onchange="changeTableName(${i},event.target.value)" value="${data[i].tableName}">
-                </div>
-                <div>
-                    <span>modelName</span>
-                    <input type="text" onchange="changeModelName(${i},event.target.value)" value="${data[i].modelName}">
+                    <div>
+                        <span>tableName</span>
+                        <input type="text" onchange="changeTableName(${i},event.target.value)" value="${data[i].tableName}">
+                    </div>
+                    <div>
+                        <span>modelName</span>
+                        <input type="text" onchange="changeModelName(${i},event.target.value)" value="${data[i].modelName}">
+                    </div>
                 </div>
                 <div class="d-flex flex-wrap">
                 ${data[i].column.reduce((acc, item, j) => {
