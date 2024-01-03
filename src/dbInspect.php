@@ -19,19 +19,21 @@ class dbInspect{
                                 ");
         $res = [];
         $map = [];
-        $counter = -1;
+        $counter = 0;
+        $types["INTEGER"] = 'int';
+        $types["TEXT"] = 'text';
         foreach($scheme as $c){
             $text = $c['sql'];
             if($c['name'] == 'sqlite_sequence'){
                 continue;
             }
             $item = $GLOBALS['parser']->parse($text);
-
+            
             foreach($item as $key => $table){
-                $t = ["tableName" => $key, "modelName" => "User", "generate" => true, "column" => []];
+                $t = ["tableName" => trim($table["name"]), "modelName" => "", "generate" => true, "column" => []];
                 $tc = [];
                 foreach($table["fields"] as $field){
-                    $tc[$field["name"]] = ["colName" => $field["name"], "colType" => $field["type"], "relation" => -1 ];
+                    $tc[$field["name"]] = ["colName" => $field["name"], "colType" => $types[$field["type"]] ?? 'text', "relation" => -1 ];
                 }
                 $t['column'] = $tc;
 
