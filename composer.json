@@ -1,0 +1,16 @@
+{
+    "name": "ru51a4/db-elequent-codegen",
+    "autoload": {
+        "psr-4": {
+            "Ru51a4\\DbElequentCodegen\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ru51a4"
+        }
+    ],
+    "require": {
+        "iamcal/sql-parser": "^0.4.0"
+    }
+}

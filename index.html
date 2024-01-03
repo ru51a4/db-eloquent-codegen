@@ -26,7 +26,7 @@
             </a>
         </header>
     </div>
-    <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+    <div aria-live="polite" aria-atomic="true" style="position: relative;">
         <!-- Position it -->
         <div style="position: absolute; top: 0; right: 0;">
 
@@ -68,6 +68,11 @@
                 <div class="h-captcha" data-sitekey="45acf79f-16c7-4d10-952e-b957fd63a4e2"></div>
             </div>
             <button class="btn-primary mt-2" onclick="genSchema()">generate</button>
+
+        </div>
+        <div class="row mt-5">
+            <input type="file" id="selectFiles" value="Import" /><br />
+            <button class="btn-primary" id="import">Import</button>
 
         </div>
         <style>
@@ -247,7 +252,7 @@
     }
     _data = JSON.parse(localStorage.getItem('data'));
     if (_data) {
-        data = _data
+        // data = _data
     }
     render();
 
@@ -334,6 +339,36 @@
 
     }
 
+    document.getElementById('import').onclick = function () {
+        var files = document.getElementById('selectFiles').files;
+        console.log(files);
+        if (files.length <= 0) {
+            return false;
+        }
+
+        var fr = new FileReader();
+
+        fr.onload = function (e) {
+            console.log(e);
+            let _data = JSON.parse(e.target.result);
+            data = [];
+            Object.keys(_data).forEach((key) => {
+                let tcol = [];
+                _data[key].tableName = _data[key].tableName.split("\"").join("");
+
+                Object.keys(_data[key].column).forEach((col) => {
+                    _data[key].column[col].colName = _data[key].column[col].colName.split("\"").join("")
+                    tcol.push(_data[key].column[col]);
+                });
+                _data[key].column = tcol;
+                data.push(_data[key])
+            });
+            console.log(data)
+            render();
+
+        }
+        fr.readAsText(files.item(0));
+    };
 
 
 </script>
