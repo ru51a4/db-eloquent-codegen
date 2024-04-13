@@ -61,7 +61,29 @@ class codegen
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+';
 
+
+$tModel .= '/*
+';
+foreach ($table["column"] as $col) {
+ $tModel .= '* table - "'. $table['tableName'].'"
+ ';
+    if ($col['colType'] == 'int') {
+                    $tModel .= '
+* @property int $' . $col['colName'] . ';
+';
+                }
+
+    if ($col['colType'] == 'text') {
+                    $tModel .= '
+* @property string $' . $col['colName'] . ';
+';
+                }
+}
+
+$tModel .= '
+*/
 class ' . $table['modelName'] . ' extends Model
 {
     use HasFactory;
@@ -72,17 +94,6 @@ class ' . $table['modelName'] . ' extends Model
 
         ';
             foreach ($table["column"] as $col) {
-                if ($col['colType'] == 'int') {
-                    $tModel .= '
-    public int $' . $col['colName'] . ';
-';
-                }
-
-                if ($col['colType'] == 'text') {
-                    $tModel .= '
-    public string $' . $col['colName'] . ';
-';
-                }
 
                 if ($col['colType'] == 'belongsTo') {
                     $tModel .= '
