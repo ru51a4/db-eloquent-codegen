@@ -49,40 +49,39 @@ class codegen
 
     }
 
-    static public function createModels($scheme)
-    {
-        $mapmtm = [];
-        foreach ($scheme as $table) {
-            if (!$table['generate']) {
-                continue;
-            }
-            $tModel = '';
-            $tModel .= '<?php
+      static public function createModels($scheme)
+        {
+            $mapmtm = [];
+            foreach ($scheme as $table) {
+                if (!$table['generate']) {
+                    continue;
+                }
+                $tModel = '';
+                $tModel .= '<?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 ';
 
 
-$tModel .= '/*
+                $tModel .= '/**
 ';
-foreach ($table["column"] as $col) {
- $tModel .= '* table - "'. $table['tableName'].'"
- ';
-    if ($col['colType'] == 'int') {
-                    $tModel .= '
-* @property int $' . $col['colName'] . ';
+                $tModel .= '* table - "'. $table['tableName'].'"
 ';
+                foreach ($table["column"] as $col) {
+
+                    if ($col['colType'] == 'int') {
+                        $tModel .= '* @property int $' . $col['colName'] . ';
+';
+                    }
+
+                    if ($col['colType'] == 'text') {
+                        $tModel .= '* @property string $' . $col['colName'] . ';
+';
+                    }
                 }
 
-    if ($col['colType'] == 'text') {
-                    $tModel .= '
-* @property string $' . $col['colName'] . ';
-';
-                }
-}
-
-$tModel .= '
+                $tModel .= '
 */
 class ' . $table['modelName'] . ' extends Model
 {
@@ -93,60 +92,60 @@ class ' . $table['modelName'] . ' extends Model
     protected $table = "' . $table["tableName"] . '";
 
         ';
-            foreach ($table["column"] as $col) {
+                foreach ($table["column"] as $col) {
 
-                if ($col['colType'] == 'belongsTo') {
-                    $tModel .= '
+                    if ($col['colType'] == 'belongsTo') {
+                        $tModel .= '
     public function ' . explode('_', $col['colName'])[0] . '()
     {
         return $this->belongsTo("\App\Models\\' . $scheme[$col['relation']]['modelName'] . '");
     }
 ';
-                }
-                if ($col['colType'] == 'hasMany') {
-                    $tModel .= '
+                    }
+                    if ($col['colType'] == 'hasMany') {
+                        $tModel .= '
     public function ' . $col['colName'] . '()
     {
         return $this->hasMany("\App\Models\\' . $scheme[$col['relation']]['modelName'] . '");
     }
 ';
-                }
+                    }
 
-            if ($col['colType'] == 'hasOne') {
-                                    $tModel .= '
+                    if ($col['colType'] == 'hasOne') {
+                        $tModel .= '
     public function ' . $col['colName'] . '()
     {
         return $this->hasOne("\App\Models\\' . $scheme[$col['relation']]['modelName'] . '");
     }
 ';
-                }
-
-
-
-
-                if ($col['colType'] == 'belongsToMany') {
-                    $tabl = $table["tableName"] . '_' . $scheme[$col['relation']]["tableName"];
-                    if ($mapmtm[$tabl]) {
-                        $tabl = $scheme[$col['relation']]["tableName"] . '_' . $table["tableName"];
                     }
-                    $mapmtm[$table["tableName"] . '_' . $scheme[$col['relation']]["tableName"]] = true;
-                    $mapmtm[$scheme[$col['relation']]["tableName"] . '_' . $table["tableName"]] = true;
 
-                    $tModel .= '
+
+
+
+                    if ($col['colType'] == 'belongsToMany') {
+                        $tabl = $table["tableName"] . '_' . $scheme[$col['relation']]["tableName"];
+                        if ($mapmtm[$tabl]) {
+                            $tabl = $scheme[$col['relation']]["tableName"] . '_' . $table["tableName"];
+                        }
+                        $mapmtm[$table["tableName"] . '_' . $scheme[$col['relation']]["tableName"]] = true;
+                        $mapmtm[$scheme[$col['relation']]["tableName"] . '_' . $table["tableName"]] = true;
+
+                        $tModel .= '
     public function ' . $col['colName'] . '()
     {
         return $this->belongsToMany("\App\Models\\' . $scheme[$col['relation']]['modelName'] . '", "' . $tabl . '");
     }
 ';
+                    }
+
                 }
+                $tModel .= '
+}';
+                force_file_put_contents('./' . $GLOBALS['id'] . '//models/' . $table['modelName'] . '.php', $tModel);
 
             }
-            $tModel .= '
-}';
-            force_file_put_contents('./' . $GLOBALS['id'] . '//models/' . $table['modelName'] . '.php', $tModel);
-
         }
-    }
 
     static public function createMigration($scheme)
     {
