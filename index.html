@@ -209,8 +209,8 @@
                 <div class="d-flex flex-wrap">
                 ${data[i].column.reduce((acc, item, j) => {
                 return acc += `
-                <div>
-                    <div style="display:flex; align-items: baseline; border:1px solid black; margin:3px;">
+                <div style="display:flex; align-items: baseline;">
+                    <div style="border:1px solid black; margin:3px;">
                         <input type="text" style="border:unset; padding:unset;" onchange="changeColName(${i},${j},event.target.value)" value="${item.colName}">
                             <select onchange="changeType(${i},${j},event.target.value)">
                                 ${types.reduce((acc, jitem) => {
