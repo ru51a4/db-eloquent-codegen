@@ -51,30 +51,26 @@
                     <option>int</option>
                     <option>text</option>
                 </select>
-                <button class="btn-primary" onclick="delCol()">del col</button>
+                <button class="btn btn-primary" onclick="delCol()">del col</button>
             </div>
             <div class="">
-                <button class="btn-primary" onclick="addCol()">add col</button>
-                <button class="btn-primary" onclick="deleteTable()">del table</button>
+                <button class="btn btn-primary" onclick="addCol()">add col</button>
+                <button class="btn btn-primary" onclick="deleteTable()">del table</button>
             </div>
         </div>
     </div>
     <div class="container">
         <div class="row">
-            <button class="btn-primary" onclick="addTable()">add table</button>
+            <button class="btn btn-primary" onclick="addTable()">add table</button>
         </div>
         <div class="row mt-5">
             <div class="d-flex flex-column align-items-center">
-                <div class="h-captcha" data-sitekey="45acf79f-16c7-4d10-952e-b957fd63a4e2"></div>
+                <div class="h-captcha" data-sitekey="15f0dd12-8230-45ec-be7a-d23816240926"></div>
             </div>
-            <button class="btn-primary mt-2" onclick="genSchema()">generate</button>
+            <button class="btn btn-primary mt-2" onclick="genSchema()">generate</button>
 
         </div>
-        <div class="row mt-5">
-            <input type="file" id="selectFiles" value="Import" /><br />
-            <button class="btn-primary" id="import">Import</button>
 
-        </div>
         <style>
             footer {
                 display: flex;
@@ -123,6 +119,7 @@
         {
             tableName: 'statuses', modelName: "Status", generate: true, column: [
                 { colName: 'user', colType: 'belongsToMany', relation: 0 },
+                { colName: 'name', colType: 'text', relation: -1 },
 
             ]
         }
@@ -212,28 +209,29 @@
                 <div class="d-flex flex-wrap">
                 ${data[i].column.reduce((acc, item, j) => {
                 return acc += `
-                 <div style="border:1px solid black; margin:3px;">
-               
-                <input type="text" style="border:unset; padding:unset;" onchange="changeColName(${i},${j},event.target.value)" value="${item.colName}">
-                    <select onchange="changeType(${i},${j},event.target.value)">
-                        ${types.reduce((acc, jitem) => {
+                <div>
+                    <div style="display:flex; align-items: baseline; border:1px solid black; margin:3px;">
+                        <input type="text" style="border:unset; padding:unset;" onchange="changeColName(${i},${j},event.target.value)" value="${item.colName}">
+                            <select onchange="changeType(${i},${j},event.target.value)">
+                                ${types.reduce((acc, jitem) => {
                     return acc += `
-                           <option value="${jitem}" ${(item.colType == jitem) ? 'selected' : ''}>${jitem}</option>
-                    
-                            `
+                                <option value="${jitem}" ${(item.colType == jitem) ? 'selected' : ''}>${jitem}</option>
+                            
+                                    `
                 }, '')};
-                    </select>
-                    <select onchange="changeRelation(${i},${j},event.target.value)">
-                            <option value="${-1}">-</option>
-                        ${data.reduce((acc, jitem, i) => {
+                            </select>
+                            <select onchange="changeRelation(${i},${j},event.target.value)">
+                                    <option value="${-1}">-</option>
+                                ${data.reduce((acc, jitem, i) => {
                     return acc += `
-                            <option value="${i}" ${(item.relation == i) ? 'selected' : ''}>${jitem.tableName}</option>
-                            `
+                                    <option value="${i}" ${(item.relation == i) ? 'selected' : ''}>${jitem.tableName}</option>
+                                    `
                 }, '')}
-                    </select>
-                    <button class="btn-primary" onclick="delCol(${i},${j})">del col</button>
+                            </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="delCol(${i},${j})">del col</button>
                 </div>
-                    `
+                `
             }, '')}
             </div>
                  <div class="">
@@ -241,8 +239,8 @@
                     <input type="checkbox" id="scales" onchange="changeGenerate(${i}, ${!data[i].generate})" name="scales" ${data[i].generate ? 'checked' : ''} />
                     <label for="scales">generate</label>
                 </div>
-                    <button class="btn-primary" onclick="addCol(${i})">add col</button>
-                    <button class="btn-primary" onclick="deleteTable(${i})">del table</button>
+                    <button class="btn btn-primary" onclick="addCol(${i})">add col</button>
+                    <button class="btn btn-primary" onclick="deleteTable(${i})">del table</button>
                 </div>
             </div>
             `
